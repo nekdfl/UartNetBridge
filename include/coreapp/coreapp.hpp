@@ -25,7 +25,7 @@ private:
     const unsigned int WIFICHECKINTERVAL_MS = 1000;
     const uint8 WIFITRY = 3;
     const uint8 CONNECT_TIMEOUT = 10;
-    const uint8 CONFIG_PORTAL_TIMEOUT = 45;
+    const uint8 CONFIG_PORTAL_TIMEOUT = 1;
     WiFiManager m_wifimanger;
     std::unique_ptr<TelnetBridge> m_telnetbridge_uptr;
 

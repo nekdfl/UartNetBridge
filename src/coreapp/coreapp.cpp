@@ -19,9 +19,13 @@ void CoreApp::setup()
 
     Serial.begin(115200);
     Serial.println("\r\n\r\n\r\n;Boot complete");
+    String chipid_str = String(ESP.getChipId());
+    String hostname = "UartNetBridge-" + chipid_str;
 
+    WiFi.hostname(hostname.c_str());
+    Serial.printf(";Hostname %s\r\n", hostname.c_str());
     //if gpio2 is down when reset wifi settings
-    resetWifiOnBoot();
+    // resetWifiOnBoot();
 
     startWifi(v_appconf);
 
@@ -46,6 +50,7 @@ void CoreApp::resetWifiOnBoot()
 
 void CoreApp::startWifi(AppConf &a_appconf)
 {
+
     m_wifimanger.setDebugOutput(false);
     m_wifimanger.setSaveConfigCallback(
         []()
@@ -77,6 +82,7 @@ bool CoreApp::readWifiSettingsAndConnect(AppConf &a_appconf, unsigned int a_trie
         {
             String longpath = WIFILISTLP + wifiname;
             String wifipass = a_appconf.getLPValue(WIFISETTINGS_FILES, longpath);
+
             WiFi.begin(wifiname.c_str(), wifipass.c_str());
             unsigned int count = 0;
             while (WiFi.status() != WL_CONNECTED and count < a_timeout)
@@ -104,7 +110,7 @@ void CoreApp::resetWifiSettings()
 void CoreApp::configViaAPWifiManager(unsigned int a_timeout)
 {
     String chipid_str = String(ESP.getChipId());
-    String ap_ssid = "SerialToWebsock-" + chipid_str;
+    String ap_ssid = "UartNetBridge-" + chipid_str;
     String ap_pass = "STW-" + chipid_str;
 
     m_wifimanger.setTimeout(a_timeout);
